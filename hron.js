@@ -1,22 +1,5 @@
 /*
-	Hron
-	===
-	
-	The Hron is based on Haxe Serialization.
-	
-	### Support
-	- null				n
-	- NaN				k
-	- negative infinity	m
-	- positive infinity	p
-	- normal float		d
-	- zero				z
-	- bool				t or f
-	- string			y [length] v [urlencode string]
-	- array				a ... h
-	- object			o ... g
-	
-	2014. tnRaro <admin@tnraro.com>
+	C. 2014. tnRaro <admin@tnraro.com>
 */
 
 var hron = (function(exports){
@@ -213,8 +196,3 @@ var hron = (function(exports){
 	
 	return exports;
 })(typeof module!='undefined'?module.exports:{});
-
-//var en = hron.encode({hello:'한글',c:null,a:[0,1,3,4,89,{loli:'suki'}],so:5.3,SEX:{a:0,b:3,c:{5:3},d:true}});
-var en = hron.encode({a:[5,6,7,{b:9},8,[10,11,1/0,''/0]]});
-console.log( en );
-console.log( hron.decode(en) );
