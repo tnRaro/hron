@@ -1,18 +1,34 @@
 Hron
 ===
 
-The Hron is based on the haxe-serialization.
+Hron is based on the haxe-serialization.
 
-### Support
-- null				n
-- NaN				k
-- negative infinity	m
-- positive infinity	p
-- normal float		d
-- zero				z
-- bool				t or f
-- string			y [length] v [urlencode string]
-- array				a ... h
-- object			o ... g
+### How to use
 
-2014. tnRaro <admin@tnraro.com>
+**encode**
+
+	hron.encode( [js-object] );
+
+**decode**
+
+	hron.decode( [hron-string] );
+
+
+### Supported type
+
+- null				( n )
+- NaN				( k )
+- negative infinity	( m )
+- positive infinity	( p )
+- normal float		( d )
+- zero				( z )
+- bool				( t ) or ( f )
+- string			( y [length] v [urlencode string] )
+- array				( a ... h )
+- object			( o ... g )
+
+### Etc
+
+[Github](https://github.com/tnRaro/hron.git)
+
+C. 2014. tnRaro <admin@tnraro.com>
