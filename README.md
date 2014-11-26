@@ -3,6 +3,12 @@ Hron
 
 Hron is based on the haxe-serialization.
 
+### Installation
+
+```sh
+$ npm install hron
+```
+
 ### How to use
 
 **encode**
