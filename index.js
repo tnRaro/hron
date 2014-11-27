@@ -3,6 +3,9 @@
 */
 
 var hron = (function(exports){
+	var VERSION = "0.1.1";
+
+
 	function cos(v){
 		var r = '';
 		switch(typeof v){
@@ -210,6 +213,9 @@ var hron = (function(exports){
 	
 	exports.decode = function(raw){
 		return xo(raw);
+	}
+	exports.version = function(){
+		return VERSION;
 	}
 	
 	return exports;
