@@ -3,76 +3,86 @@
 */
 
 var hron = (function(exports){
-	
-	function co(r, o){
-		var isa = Array.isArray(o);
-		isa
-			?	r += 'a'
-			:	r += 'o'
-		;
-		for(k in o){
-			
-			if(!isa && typeof k == 'string'){
-				var t = encodeURIComponent(k);
+	function cos(v){
+		var r = '';
+		switch(typeof v){
+			case 'string':
+				var t = encodeURIComponent(v);
 				r += 'y';
 				r += t.length;
 				r += 'v';
 				r += t;
-			}
-			
-			var v = o[k];
-			if(v === null){
-				r += 'n';
-			}else{
-				switch(typeof v){
-					case 'string':
-						var t = encodeURIComponent(v);
-						r += 'y';
-						r += t.length;
-						r += 'v';
-						r += t;
-						break;
-					case 'number':
-						if(isNaN(v)){
-							r += 'k';
+				break;
+			case 'number':
+				if(isNaN(v)){
+					r += 'k';
+				}else{
+					if(isFinite(v)){
+						if(v == 0){
+							r += 'z';
 						}else{
-							if(isFinite(v)){
-								if(v == 0){
-									r += 'z';
-								}else{
-									r += 'd';
-									r += v;
-								}
-							}else{
-								if(v === Infinity)
-									r += 'p';
-								else
-								if(v === -Infinity)
-									r += 'm';
-							}
+							r += 'd';
+							r += v;
 						}
-						break;
-					case 'boolean':
-						r += v?'t':'f';
-						break;
-					case 'object':
-						r += co('', v);
-						break;
-					default:
-						
+					}else{
+						if(v === Infinity)
+							r += 'p';
+						else
+						if(v === -Infinity)
+							r += 'm';
+					}
+				}
+				break;
+			case 'boolean':
+				r += v?'t':'f';
+				break;
+			case 'object':
+				r += co('', v);
+				break;
+			default:
+
+		}
+		return r;
+	}
+
+	function co(r, o){
+		var isa = Array.isArray(o);
+		if(typeof o == 'object'){
+			isa
+				?	r += 'a'
+				:	r += 'o'
+			;
+			for(k in o){
+
+				if(!isa && typeof k == 'string'){
+					var t = encodeURIComponent(k);
+					r += 'y';
+					r += t.length;
+					r += 'v';
+					r += t;
+				}
+
+				var v = o[k];
+				if(v === null){
+					r += 'n';
+				}else{
+					r += cos(v);
 				}
 			}
+			isa
+				?	r += 'h'
+				:	r += 'g'
+			;
+		}else{
+			r += cos(o);
 		}
-		isa
-			?	r += 'h'
-			:	r += 'g'
-		;
 		return r;
 	}
 	
-	function xo(r, o){
+	function xo(o){
 		var pos=0;
 		var stack = [];
+		var r;
 		while(pos<o.length){
 			switch(o.charAt(pos)){
 				case 'n':
@@ -125,63 +135,71 @@ var hron = (function(exports){
 				case 'g':
 					stack.push('}');
 					break;
+				default:
+					stack.push(o.charAt(pos));
 			}
 			
 			pos++;
 		}
 		
 		//console.log(stack);
-		
-		function re(pos, t){
-			var isa = Array.isArray(t);
-			while(stack.length>pos){
-				var p = stack[pos++];
-				
-				if(p == '{'){
-					if(isa){
-						t.push({});
-						pos = re(pos, t[t.length-1]);
-					}else{
-						if(stack[pos-2]){
-							t[stack[pos-2]] = {};
-							pos = re(pos, t[stack[pos-2]]);
-						}
-					}
-				}else
-				if(p == '}'){
-					return pos;
-				}else
-				if(p == '['){
-					if(isa){
-						t.push([]);
-						pos = re(pos, t[t.length-1]);
-					}else{
-						if(stack[pos-2]){
-							t[stack[pos-2]] = [];
-							pos = re(pos, t[stack[pos-2]]);
-						}
-					}
-				}else
-				if(p == ']'){
-					return pos;
-				}else{
-					if(isa){
-						t.push(p);
-					}else{
-						var ps = stack[pos++];
-						if(ps == '{'){
-							pos--;
-						}else
-						if(ps == '['){
-							pos--;
+		if(stack[0]=='{'||stack[0]=='['){
+			if(stack[0]=='{')	r = {};
+			if(stack[0]=='[')	r = [];
+
+			function re(pos, t){
+				var isa = Array.isArray(t);
+				while(stack.length>pos){
+					var p = stack[pos++];
+
+					if(p == '{'){
+						if(isa){
+							t.push({});
+							pos = re(pos, t[t.length-1]);
 						}else{
-							t[p] = ps;
+							if(stack[pos-2]){
+								t[stack[pos-2]] = {};
+								pos = re(pos, t[stack[pos-2]]);
+							}
+						}
+					}else
+					if(p == '}'){
+						return pos;
+					}else
+					if(p == '['){
+						if(isa){
+							t.push([]);
+							pos = re(pos, t[t.length-1]);
+						}else{
+							if(stack[pos-2]){
+								t[stack[pos-2]] = [];
+								pos = re(pos, t[stack[pos-2]]);
+							}
+						}
+					}else
+					if(p == ']'){
+						return pos;
+					}else{
+						if(isa){
+							t.push(p);
+						}else{
+							var ps = stack[pos++];
+							if(ps == '{'){
+								pos--;
+							}else
+							if(ps == '['){
+								pos--;
+							}else{
+								t[p] = ps;
+							}
 						}
 					}
 				}
 			}
+			re(1, r);
+		}else{
+			r = stack[0];
 		}
-		re(0, r);
 		
 		return r;
 	}
@@ -191,7 +209,7 @@ var hron = (function(exports){
 	}
 	
 	exports.decode = function(raw){
-		return xo({}, raw);
+		return xo(raw);
 	}
 	
 	return exports;
