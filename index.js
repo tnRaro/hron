@@ -55,7 +55,7 @@ var hron = (function(exports){
 				?	r += 'a'
 				:	r += 'o'
 			;
-			for(k in o){
+			for(var k in o){
 
 				if(!isa && typeof k == 'string'){
 					var t = encodeURIComponent(k);
@@ -121,7 +121,7 @@ var hron = (function(exports){
 						slen += o.charAt(++pos);
 					}
 					pos++;
-					for(i=0;i<parseInt(slen);i++){
+					for(var i=0;i<parseInt(slen);i++){
 						t += o.charAt(++pos);
 					}
 					stack.push(decodeURIComponent(t));
