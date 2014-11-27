@@ -11,7 +11,8 @@
     "url": "https://github.com/tnRaro/hron.git"
   },
   "keywords": [
-    "serialization"
+    "serialization",
+	"haxe"
   ],
   "author": "tnRaro <admin@tnraro.com>",
   "license": "GPL",
